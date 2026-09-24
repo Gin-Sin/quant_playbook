@@ -114,3 +114,35 @@ test('question, hint and solution work with keyboard on a narrow dark page', asy
   await page.goBack()
   await expect(page.locator('.practice-reveal')).toHaveCount(0)
 })
+
+test('a disclosure opened before hydration reveals its content once ready', async ({ page }) => {
+  let release!: () => void
+  const scriptsReady = new Promise<void>((resolve) => { release = resolve })
+  await page.route('**/assets/*.js', async (route) => {
+    await scriptsReady
+    await route.continue()
+  })
+  await page.goto('02-brain-teasers/overview.html', { waitUntil: 'commit' })
+  const card = page.locator('.practice-question').first()
+  try {
+    await card.locator('.practice-solution summary').click()
+    await expect(card.locator('.practice-solution')).toHaveAttribute('open', '')
+    await expect(card.locator('.practice-reveal')).toHaveCount(0)
+  } finally { release() }
+  await expect(card.locator('.practice-solution .practice-reveal')).toBeVisible({ timeout: 30_000 })
+  await expect(card.locator('.practice-hint .practice-reveal')).toHaveCount(0)
+})
+
+test('source navigation survives slow page scripts and outline scrolling', async ({ page }) => {
+  await page.goto('04-probability/overview.html')
+  const card = page.locator('.practice-question').filter({ hasText: '两位银行家分别' })
+  await card.locator('.practice-solution summary').click()
+  await expect(card.locator('.diagram-count')).toContainText('15.97%')
+  await page.route('**/assets/*.js', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 800))
+    await route.continue()
+  })
+  await card.getByRole('link', { name: '核对原文' }).click()
+  await expect(page).toHaveURL(/source.html\?page=104/)
+  await expect(page.locator('.reader-sheet img')).toHaveAttribute('src', /104\.webp/)
+})
