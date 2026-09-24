@@ -1,8 +1,8 @@
 # Quant Playbook
 
-基于 Xinfeng Zhou《A Practical Guide to Quantitative Finance Interviews》第一版（2008）的中文阅读网站，在 `vuepress-notes-template` 基础上实现。网站提供七章学习笔记、32 个技术专题、代表题推导、核心公式速查，以及所附 PDF 的完整 213 页阅读器。
+基于 Xinfeng Zhou《A Practical Guide to Quantitative Finance Interviews》第一版（2008）的中文阅读网站，在 `vuepress-notes-template` 基础上实现。网站提供七章学习笔记、32 个技术专题、62 个题目与练习单元、核心公式速查，以及所附 PDF 的完整 213 页阅读器。
 
-中文笔记重述核心内容，并非全部题目的逐题译本。原书扫描页保留完整题目与解答；搜索索引覆盖中文笔记。正文页码映射为 `PDF 页 = 书页 + 16`。
+练习默认只显示完整题干，提示与讲解独立折叠，图示在展开讲解后加载。原书代表题以中文译述，补充练习另有标注，并非全部题目的逐题译本。搜索索引收录题干，排除提示、讲解与知识回顾；公式页只索引标题。原书扫描页保留全部题目与解答。正文页码映射为 `PDF 页 = 书页 + 16`。
 
 ## 本地运行
 
@@ -22,7 +22,8 @@ make preview
 - `notes/reference/`：核心公式、来源与校读说明。
 - `notes/source.md`：原书阅读入口。
 - `notes/.vuepress/public/book/`：PDF 与 213 张 WebP 扫描页，无外部资源依赖。
-- `notes/.vuepress/components/diagrams/`：生日概率与 Black–Scholes 交互示例。
+- `notes/.vuepress/components/PracticeQuestion.vue`：题干、提示、讲解与重置交互；内容由 Markdown 插槽提供。
+- `notes/.vuepress/components/diagrams/`：棋盘染色、会面区域、连续子数组、生日概率与 Black–Scholes 交互图。
 - `notes/.vuepress/data/math.ts`：交互计算；Greeks 单位与公式在源码及页面中注明。
 - `site.config.ts`：站点名称、导航与侧栏分组名。
 
@@ -37,12 +38,13 @@ pnpm test
 pnpm run docs:build
 pnpm exec playwright install --with-deps --no-shell chromium
 pnpm run export:smoke
+pnpm run test:practice
 make clean
 ```
 
 `pnpm run docs:build` 生成静态文件到 `_site/`。`make clean` 删除 `_site/` 与 VuePress 缓存，不删除源文件。
 
-新增的数学测试覆盖生日概率边界、Black–Scholes 参考价格、put–call parity，以及 Greeks 与数值差分的一致性。离线导出测试使用 `tests/fixtures/`，不进入生产侧栏。
+数学测试覆盖生日概率边界、Black–Scholes 参考价格、put–call parity，以及 Greeks 与数值差分的一致性。练习浏览器测试覆盖全部 62 个题目的默认折叠、独立提示、讲解、重置、搜索、键盘、原文跳转与手机布局。离线导出测试使用 `tests/fixtures/`，包含练习与图示交互，不进入生产侧栏。
 
 如需重新生成扫描图，可在安装 `pymupdf`、`pillow` 的 Python 虚拟环境中运行 `python scripts/prepare-book.py`。正常运行和构建网站不需要 Python。
 

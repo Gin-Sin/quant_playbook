@@ -1,5 +1,6 @@
 ---
 title: "03 · 微积分与线性代数"
+pageClass: practice-page
 order: 3
 ---
 
@@ -7,9 +8,38 @@ order: 3
 
 <SourceNote :start="33" :end="58" section="Chapter 3" />
 
-本章提供后续概率与金融推导需要的数学工具：用导数描述局部变化，用积分累加连续量，用矩阵处理多个变量。阅读时应同时记住公式与适用条件。
+先读题并独立思考；需要方向时展开提示，完成尝试后再展开讲解。提示、答案和示意图默认收起，每道题可以单独展开。题干按原书译述，补充练习另有标注。
 
 ## 3.1 极限与导数
+
+### 两个极限
+
+<PracticeQuestion :page="36">
+
+分别求 $\lim_{x\to\infty}e^x/x^2$ 与 $\lim_{x\to0^+}x^2\ln x$。说明计算中使用的法则为何适用。
+
+<template #hint>
+
+观察它们是否属于未定式。乘积形式能否改写成一个商？
+
+</template>
+<template #solution>
+
+第一个极限连续使用两次 L’Hôpital 法则：$e^x/x^2\to e^x/(2x)\to e^x/2\to+\infty$。每次均满足相应条件。
+
+L’Hôpital 法则针对 $0/0$ 或 $\infty/\infty$ 等未定式，并要求相应可导性与导数比的极限条件。乘积型极限可以先改写成商，例如
+
+$$
+\lim_{x\to0^+}x^2\ln x
+=\lim_{x\to0^+}\frac{\ln x}{x^{-2}}
+=\lim_{x\to0^+}\frac{1/x}{-2x^{-3}}=0.
+$$
+
+</template>
+</PracticeQuestion>
+
+<details class="concept-review">
+<summary>知识回顾</summary>
 
 原书书页 33–36。导数是函数在一点的局部变化率：
 
@@ -25,15 +55,38 @@ $$
 | $f''(x_0)<0$ | 严格局部极大 |
 | $f''(x_0)=0$ | 检验无结论，需要进一步分析 |
 
-L’Hôpital 法则针对 $0/0$ 或 $\infty/\infty$ 等未定式，并要求相应可导性与导数比的极限条件。乘积型极限可以先改写成商，例如
+</details>
+
+## 3.2 积分
+
+### 垂直圆柱的交集
+
+<PracticeQuestion :page="38" :end="39">
+
+两个半径均为 1 的圆柱，其轴线垂直相交，中心也重合。求两个圆柱公共部分的体积。
+
+<template #hint>
+
+选一个坐标方向切片。每个高度处的公共截面是什么形状？
+
+</template>
+<template #solution>
+
+先推广到两圆柱半径同为 $r$，轴线垂直相交。在高度 $z$ 处，交集横截面是边长 $2\sqrt{r^2-z^2}$ 的正方形，因此
 
 $$
-\lim_{x\to0^+}x^2\ln x
-=\lim_{x\to0^+}\frac{\ln x}{x^{-2}}
-=\lim_{x\to0^+}\frac{1/x}{-2x^{-3}}=0.
+V=\int_{-r}^r4(r^2-z^2)\,dz=\frac{16r^3}{3}.
 $$
 
-## 3.2 积分：先确定累加的对象
+截面解释决定了积分形式，也让体积随 $r^3$ 缩放的量纲检查变得直接。连续随机变量的期望同样是一种加权累加：$E[g(X)]=\int g(x)f_X(x)\,dx$。
+
+原题 $r=1$，所以体积为 $16/3$。
+
+</template>
+</PracticeQuestion>
+
+<details class="concept-review">
+<summary>知识回顾</summary>
 
 原书书页 36–40。积分计算通常分两步：先把几何或概率问题转成正确的被积函数和边界，再应用换元、分部积分等技巧。
 
@@ -45,26 +98,22 @@ $$
 \int u\,dv=uv-\int v\,du.
 $$
 
-**两个垂直圆柱的交集。** 两圆柱半径同为 $r$，轴线垂直相交。在高度 $z$ 处，交集横截面是边长 $2\sqrt{r^2-z^2}$ 的正方形，因此
-
-$$
-V=\int_{-r}^r4(r^2-z^2)\,dz=\frac{16r^3}{3}.
-$$
-
-截面解释决定了积分形式，也让体积随 $r^3$ 缩放的量纲检查变得直接。连续随机变量的期望同样是一种加权累加：$E[g(X)]=\int g(x)f_X(x)\,dx$。
+</details>
 
 ## 3.3 偏导数与多重积分
 
-原书书页 40–41。偏导数描述其余变量固定时的变化；全微分把各方向的一阶变化相加：
+### 高斯积分
 
-$$
-df=\sum_i\frac{\partial f}{\partial x_i}\,dx_i.
-$$
+<PracticeQuestion :page="41">
 
-多重积分换元时必须保留 Jacobian。例如 $x=r\cos\theta,y=r\sin\theta$，面积元变成 $dx\,dy=r\,dr\,d\theta$。
+计算 $\displaystyle\int_0^\infty e^{-x^2/2}\,dx$。如果不直接引用正态密度的归一化结论，怎样推导？
 
-<details>
-<summary>代表推导：高斯积分为什么等于 √π？</summary>
+<template #hint>
+
+一维不定积分可能不好求。将相关的全实轴积分平方后，能否变成一个有对称性的二维积分？
+
+</template>
+<template #solution>
 
 设 $I=\int_{-\infty}^{\infty}e^{-x^2}\,dx$。由于被积函数非负，可将平方写成整个平面上的二重积分，再转极坐标：
 
@@ -74,19 +123,38 @@ $$
 
 $I>0$，所以 $I=\sqrt\pi$。相应地，$\int_{-\infty}^{\infty}e^{-x^2/2}dx=\sqrt{2\pi}$，这给出标准正态密度的归一化常数。
 
+原题只取正半轴，且指数为 $-x^2/2$。利用对称性与换元，结果为 $\frac12\sqrt{2\pi}=\sqrt{\pi/2}$。
+
+</template>
+</PracticeQuestion>
+
+<details class="concept-review">
+<summary>知识回顾</summary>
+
+原书书页 40–41。偏导数描述其余变量固定时的变化；全微分把各方向的一阶变化相加：
+
+$$
+df=\sum_i\frac{\partial f}{\partial x_i}\,dx_i.
+$$
+
+多重积分换元时必须保留 Jacobian。例如 $x=r\cos\theta,y=r\sin\theta$，面积元变成 $dx\,dy=r\,dr\,d\theta$。
+
 </details>
 
 ## 3.4 Taylor 展开、求根与约束优化
 
-原书书页 41–46。Taylor 展开用局部多项式近似函数：
+### 近似求平方根
 
-$$
-f(x+h)=f(x)+f'(x)h+\frac12f''(x)h^2+O(h^3).
-$$
+<PracticeQuestion :page="44" :end="45">
 
-这里写出的余项阶数需要邻域内足够的光滑性。金融中的 Delta–Gamma 近似，以及随机微积分中的 Itô 修正，都与二阶项有关。
+求方程 $x^2=37$ 的正根，保留三位小数。说明如何在一个容易计算的初值附近改进近似。
 
-### 求根方法的取舍
+<template #hint>
+
+选择邻近的完全平方数。局部切线给出的下一次近似落在哪里？
+
+</template>
+<template #solution>
 
 Newton 法把切线与横轴的交点作为下一次近似：
 
@@ -102,7 +170,23 @@ $$
 
 对 $\sqrt{37}$，令 $f(x)=x^2-37$，从 $x_0=6$ 开始，第一步得到 $x_1=6+1/12\approx6.0833$。
 
-### Lagrange 乘子
+继续迭代得到 $x\approx6.0827625$，保留三位小数为 $6.083$。
+
+</template>
+</PracticeQuestion>
+
+<details class="concept-review">
+<summary>知识回顾</summary>
+
+原书书页 41–46。Taylor 展开用局部多项式近似函数：
+
+$$
+f(x+h)=f(x)+f'(x)h+\frac12f''(x)h^2+O(h^3).
+$$
+
+这里写出的余项阶数需要邻域内足够的光滑性。金融中的 Delta–Gamma 近似，以及随机微积分中的 Itô 修正，都与二阶项有关。
+
+**Lagrange 乘子**
 
 在正则等式约束 $g(x)=c$ 下寻找 $f$ 的驻点，可解
 
@@ -112,7 +196,34 @@ $$
 
 这些方程给出候选点。是否为极值、是否全局最优，仍需结合约束集与二阶信息判断。后续投资组合约束可用同一方法处理。
 
+</details>
+
 ## 3.5 常微分方程
+
+### 一阶初值问题
+
+<PracticeQuestion :page="47">
+
+求解 $y\prime+6xy=0$，初始条件为 $y(0)=1$。
+
+<template #hint>
+
+把变量分离，或寻找使左边成为乘积导数的因子。积分常数由什么确定？
+
+</template>
+<template #solution>
+
+例如$y'+6xy=0,y(0)=1$，积分得到 $\ln y=-3x^2+C$，再由初值确定
+
+$$
+y(x)=e^{-3x^2}.
+$$
+
+</template>
+</PracticeQuestion>
+
+<details class="concept-review">
+<summary>知识回顾</summary>
 
 原书书页 46–50。先判断方程属于哪一类，再选求解方法。通解中的自由常数需要由初始或边界条件确定。
 
@@ -123,15 +234,62 @@ $$
 | $ay''+by'+cy=0$ | 解特征方程 $ar^2+br+c=0$ |
 | 线性非齐次方程 | 通解等于齐次通解加一个非齐次特解 |
 
-例如 $y'+6xy=0,y(0)=1$，积分得到 $\ln y=-3x^2+C$，再由初值确定
-
-$$
-y(x)=e^{-3x^2}.
-$$
-
 二阶常系数方程有重根 $r$ 时，两个独立解为 $e^{rx}$ 与 $xe^{rx}$；复根 $\alpha\pm i\beta$ 对应 $e^{\alpha x}\cos\beta x$ 与 $e^{\alpha x}\sin\beta x$。
 
-## 3.6 线性代数：结构决定计算方式
+</details>
+
+## 3.6 线性代数
+
+### 相关系数的可行范围
+
+<PracticeQuestion :page="56" :end="57">
+
+三个方差有限且非零的随机变量 $X,Y,Z$ 满足 $\rho_{XY}=0.8$、$\rho_{XZ}=0.8$。$Y$ 与 $Z$ 的相关系数最大和最小各是多少？
+
+<template #hint>
+
+把三个两两相关系数放进同一个矩阵。作为相关矩阵，它必须满足什么条件？
+
+</template>
+<template #solution>
+
+相关矩阵必须正半定：
+
+$$
+R=\begin{pmatrix}1&0.8&0.8\\0.8&1&\rho\\0.8&\rho&1\end{pmatrix}.
+$$
+
+其行列式为 $-\rho^2+1.28\rho-0.28=(1-\rho)(\rho-0.28)$。结合二阶主子式约束 $|\rho|\le1$，得到 $0.28\le\rho\le1$。
+
+</template>
+</PracticeQuestion>
+
+### 生成相关正态变量
+
+<PracticeQuestion :page="57" :end="58">
+
+已知可以生成独立的标准正态随机数。怎样构造两个都服从 $N(0,1)$、且相关系数为给定 $\rho\in[-1,1]$ 的随机变量？
+
+<template #hint>
+
+固定其中一个变量，把另一个写成两份独立随机数的线性组合，再核对方差与协方差。
+
+</template>
+<template #solution>
+
+若需要模拟两个相关的标准正态变量，可以从独立的 $Z_1,Z_2$ 构造
+
+$$
+X=Z_1,\qquad Y=\rho Z_1+\sqrt{1-\rho^2}Z_2.
+$$
+
+方差与协方差直接给出 $\operatorname{Var}(Y)=1$ 和 $\operatorname{Cov}(X,Y)=\rho$。高维情形用 $X=LZ$，其中 $LL^T=\Sigma$。
+
+</template>
+</PracticeQuestion>
+
+<details class="concept-review">
+<summary>知识回顾</summary>
 
 原书书页 50–58。矩阵分解把一般问题转成三角求解、正交变换或独立方向上的计算。
 
@@ -144,7 +302,7 @@ $$
 
 最小二乘最小化 $\|X\beta-y\|^2$。$X$ 列满秩时正规方程为 $X^TX\hat\beta=X^Ty$。实际计算可用 QR 求解，避免显式求逆，并减少正规方程对条件数的不利影响。
 
-### 协方差矩阵与正半定性
+**协方差矩阵与正半定性**
 
 对任意向量 $a$，$a^T\Sigma a=\operatorname{Var}(a^TX)\ge0$，所以协方差矩阵必须正半定。对实对称矩阵，这等价于全部特征值非负；正定则要求非零 $a$ 时严格大于零。
 
@@ -152,25 +310,11 @@ $$
 原书书页 56 将正半定性与顺序主子式的非负性联系起来。严谨的判据是**所有主子式**非负，仅检查左上角的顺序主子式不够。例如 $\operatorname{diag}(0,-1)$ 的两个顺序主子式均为零，却不是正半定。正定情形才可使用“所有顺序主子式严格为正”的 Sylvester 判据。这是本站对原书表述的数学补充。
 :::
 
-**相关系数的范围。** 已知 $\rho_{XY}=\rho_{XZ}=0.8$，求 $\rho_{YZ}=\rho$ 的可行范围。
-
-<details>
-<summary>展开矩阵约束</summary>
-
-相关矩阵必须正半定：
-
-$$
-R=\begin{pmatrix}1&0.8&0.8\\0.8&1&\rho\\0.8&\rho&1\end{pmatrix}.
-$$
-
-其行列式为 $-\rho^2+1.28\rho-0.28=(1-\rho)(\rho-0.28)$。结合二阶主子式约束 $|\rho|\le1$，得到 $0.28\le\rho\le1$。
-
 </details>
 
-若需要模拟两个相关的标准正态变量，可以从独立的 $Z_1,Z_2$ 构造
+<details class="concept-review">
+<summary>本章学习建议</summary>
 
-$$
-X=Z_1,\qquad Y=\rho Z_1+\sqrt{1-\rho^2}Z_2.
-$$
+本章提供后续概率与金融推导需要的数学工具：用导数描述局部变化，用积分累加连续量，用矩阵处理多个变量。阅读时应同时记住公式与适用条件。
 
-方差与协方差直接给出 $\operatorname{Var}(Y)=1$ 和 $\operatorname{Cov}(X,Y)=\rho$。高维情形用 $X=LZ$，其中 $LL^T=\Sigma$。
+</details>

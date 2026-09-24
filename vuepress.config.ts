@@ -12,6 +12,7 @@ import { defaultTheme } from "@vuepress/theme-default"
 import { defineUserConfig } from "vuepress"
 
 import { notePagePatterns } from "./lib/content.js"
+import { searchableContent } from "./lib/search-content.js"
 import { katexOnlyPlugin } from "./plugins/katex.js"
 import { createSidebar } from "./plugins/sidebar.js"
 import { portableFileRouterPlugin } from "./plugins/portableExport.js"
@@ -60,9 +61,11 @@ const base = (
 
 // SlimSearch rc.131 currently traverses text below <pre> even though code is
 // documented as excluded. Index a sanitized copy, then restore rendered HTML.
-const filterSearchPage = (page: { contentRendered: string }): boolean => {
+const filterSearchPage = (page: { contentRendered: string; path: string }): boolean => {
   const rendered = page.contentRendered
-  page.contentRendered = rendered.replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, "")
+  page.contentRendered = page.path === '/reference/formulas.html'
+    ? (rendered.match(/<h[1-6]\b[^>]*>[\s\S]*?<\/h[1-6]>/gi) ?? []).join('\n')
+    : searchableContent(rendered)
   queueMicrotask(() => {
     page.contentRendered = rendered
   })
@@ -161,6 +164,7 @@ export default defineUserConfig({
       : [
           slimsearchPlugin({
             indexContent: true,
+            preserveTags: ["PracticeQuestion"],
             filter: filterSearchPage,
             locales: {
               "/": { placeholder: "搜索章节、公式、题目" },

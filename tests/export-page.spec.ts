@@ -82,6 +82,18 @@ test("strict export hydrates from file URL without network", async ({ page }) =>
   await counter.click()
   await expect(counter).toHaveText(/Count: 1/u)
 
+  const practice = page.locator('.practice-question')
+  await expect(practice.locator('.practice-reveal')).toHaveCount(0)
+  await practice.locator('.practice-hint summary').click()
+  await expect(practice.locator('.practice-hint')).toContainText('Count the two colors first.')
+  await expect(practice.locator('.practice-solution .practice-reveal')).toHaveCount(0)
+  await practice.locator('.practice-solution summary').click()
+  await expect(practice.locator('.chess-missing')).toHaveCount(2)
+  await practice.getByRole('button', { name: '显示完整棋盘' }).click()
+  await expect(practice.locator('.chess-missing')).toHaveCount(0)
+  await practice.getByRole('button', { name: '收起提示和讲解，重新思考' }).click()
+  await expect(practice.locator('.practice-reveal')).toHaveCount(0)
+
   await expect(page.locator("#toc")).toBeVisible()
   const formulaLink = page
     .getByLabel("本页目录")

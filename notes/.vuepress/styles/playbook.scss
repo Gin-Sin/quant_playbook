@@ -136,3 +136,51 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 @media (max-width: 450px) { .chapter-grid { grid-template-columns: 1fr; } .chapter-english { min-height: 0; } }
 @media (prefers-reduced-motion: reduce) { .book-home a.chapter-card { transition: none; } }
+
+.practice-question { margin: 1rem 0 1.75rem; border: 1px solid var(--book-border); border-radius: 8px; padding: 1.25rem 1.4rem; }
+.practice-page [vp-content] h2 { padding-top: 0; margin-top: 2.2rem; scroll-margin-top: calc(var(--navbar-height) + 1rem); }
+.practice-page [vp-content] h3 { padding-top: 0; margin: 1.7rem 0 .65rem; scroll-margin-top: calc(var(--navbar-height) + 1rem); }
+.practice-source { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .3rem 1rem; font-size: .75rem; color: var(--book-muted); line-height: 1.7; }
+.practice-source a { font-weight: 500; }
+.practice-prompt { margin: 1rem 0 1.4rem; }
+.practice-prompt > :last-child { margin-bottom: 0; }
+.practice-question > details { border-radius: 5px; padding: .65rem .85rem; margin: .6rem 0 0; }
+.practice-question > details > summary { display: flex; align-items: center; gap: .65rem; list-style: none; font-size: .9375rem; }
+.practice-question > details > summary::-webkit-details-marker { display: none; }
+.practice-question > details > summary::after { content: '+'; margin-left: auto; font-size: 1.15rem; line-height: 1; font-weight: 400; }
+.practice-question > details[open] > summary::after { content: '−'; }
+.practice-step { font-family: Georgia, serif; font-size: .8rem; color: var(--book-muted); font-weight: 400; }
+.disclosure-note { font-weight: 400; color: var(--book-muted); font-size: .75rem; }
+.practice-hint { background: var(--book-surface); }
+.practice-reveal { padding-top: .3rem; }
+.practice-reveal .mermaid-wrapper { margin-inline: 0; }
+.practice-reveal > :last-child { margin-bottom: .2rem; }
+.practice-reset { display: block; border: 0; background: none; color: var(--book-muted); font: inherit; font-size: .75rem; cursor: pointer; margin: .8rem 0 0 auto; padding: .2rem 0; text-decoration: underline; text-underline-offset: 3px; }
+.concept-review { border-style: dashed; font-size: .9375rem; }
+.concept-review > summary { font-size: .875rem; color: var(--book-muted); font-weight: 400; }
+.reasoning-diagram { margin-inline: 0; }
+.diagram-count { text-align: center; margin: .7rem 0; font-size: .9rem; }
+.diagram-count strong { color: var(--diagram-success); }
+.chessboard { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); grid-template-rows: repeat(8, minmax(0, 1fr)); width: 100%; max-width: 280px; aspect-ratio: 1; margin: 1rem auto; border: 1px solid var(--diagram-line); }
+.chessboard > span { min-width: 0; min-height: 0; line-height: 1; background: var(--vp-c-bg); display: flex; align-items: center; justify-content: center; }
+.chessboard > .chess-dark { background: var(--diagram-primary); }
+.chessboard > .chess-missing { background: var(--book-surface); color: var(--diagram-muted); font-size: 1.4rem; }
+.meeting-chart { display: block; max-width: 390px; width: 100%; margin: -1rem auto 0; }
+.meeting-chart text { fill: var(--diagram-muted); font-size: 14px; }
+.array-strip { display: grid; grid-template-columns: repeat(9, 1fr); padding: 0 !important; gap: .25rem; margin: 1rem 0; list-style: none; }
+.array-strip li { text-align: center; border: 2px solid transparent; border-radius: 4px; padding: .2rem 0; margin: 0; }
+.array-strip li.array-best { background: var(--vp-c-accent-soft); color: var(--vp-c-accent); }
+.array-strip li.array-current { border-color: var(--diagram-primary); }
+.array-strip li.array-pending { color: var(--book-muted); }
+.array-strip li small { display: block; font-size: .65rem; color: var(--book-muted); }
+.scan-values { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.scan-values p { margin: 0; font-size: .75rem; line-height: 1.6; }
+.scan-values strong { display: block; font-size: 1.1rem; color: var(--diagram-success); }
+@media (max-width: 719px) {
+  .practice-question { padding: 1rem .85rem; }
+  .practice-question > details { padding: .6rem .65rem; }
+  .practice-question .lab { padding: .85rem .6rem; }
+  .practice-question .lab-control { grid-template-columns: 4.5rem 1fr 4rem; gap: .3rem; }
+  .disclosure-note { display: none; }
+  .array-strip { gap: .1rem; font-size: .8125rem; }
+}

@@ -7,6 +7,10 @@ import OptionLab from "./components/diagrams/OptionLab.vue"
 import BookHome from "./components/BookHome.vue"
 import BookReader from "./components/BookReader.vue"
 import SourceNote from "./components/SourceNote.vue"
+import PracticeQuestion from "./components/PracticeQuestion.vue"
+import ChessboardDiagram from "./components/diagrams/ChessboardDiagram.vue"
+import MeetingDiagram from "./components/diagrams/MeetingDiagram.vue"
+import SubarrayDiagram from "./components/diagrams/SubarrayDiagram.vue"
 
 defineMermaidConfig({
   flowchart: {
@@ -53,5 +57,9 @@ export default defineClientConfig({
     app.component("BookHome", BookHome)
     app.component("BookReader", BookReader)
     app.component("SourceNote", SourceNote)
+    app.component("PracticeQuestion", PracticeQuestion)
+    app.component("ChessboardDiagram", ChessboardDiagram)
+    app.component("MeetingDiagram", MeetingDiagram)
+    app.component("SubarrayDiagram", SubarrayDiagram)
   },
 })

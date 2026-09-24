@@ -10,6 +10,7 @@
     "docs:clean-dev": "vuepress dev notes --host 127.0.0.1 --clean-cache --clean-temp",
     "export:page": "node scripts/export-page.mjs",
     "export:smoke": "playwright test tests/export-page.spec.ts",
+    "test:practice": "playwright test --config playwright.practice.config.ts",
     "test": "tsx --test tests/**/*.test.ts && node --test tests/**/*.test.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json && vue-tsc --noEmit -p tsconfig.app.json"
   },

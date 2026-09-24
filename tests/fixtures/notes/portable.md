@@ -4,6 +4,8 @@ title: "Portable Export Fixture"
 
 <script setup>
 import { ref } from "vue"
+import PracticeQuestion from "../../../notes/.vuepress/components/PracticeQuestion.vue"
+import ChessboardDiagram from "../../../notes/.vuepress/components/diagrams/ChessboardDiagram.vue"
 
 const count = ref(0)
 </script>
@@ -49,3 +51,23 @@ flowchart LR
 ### Nested outline entry
 
 The exported page keeps its nested outline.
+
+## Practice disclosure
+
+<PracticeQuestion :page="10">
+
+Can the remaining board be covered?
+
+<template #hint>
+
+Count the two colors first.
+
+</template>
+<template #solution>
+
+The colors have different counts.
+
+<ChessboardDiagram />
+
+</template>
+</PracticeQuestion>
